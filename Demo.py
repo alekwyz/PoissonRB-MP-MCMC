@@ -48,7 +48,7 @@ if __name__ == '__main__':
     # Run simulation
 #    Output = Sampling_Calderhead(d, alpha, x0, L, M, N, StepSize, Cov)
 #    Output = Sampling_Yang(d, alpha, x0, L, M, N, StepSize, Cov)
-    Output = Sampling_Yang_auxiliary(d, alpha, x0, L, M, N, StepSize, Cov)  
+    Output = Sampling_Yang_auxiliary(d, alpha, x0, L, M, N, StepSize, Cov)
     
     # Stopping time
     EndTime = time.time()
@@ -76,8 +76,8 @@ if __name__ == '__main__':
     SubPlot.plot(x,y, label = 'True PDF')
     SubPlot.legend()
     plt.savefig('./Yang_etal_M1.eps')
+    plt.savefig('./Yang_etal_M1.png', format="png", dpi=300, transparent=True)  # easy to view
 
-
-    # Compute average acceptance rate 
+    # Compute average acceptance rate
     AcceptRate = Output.getAcceptRate(BurnIn)
     print ("Acceptance rate = ", AcceptRate)
