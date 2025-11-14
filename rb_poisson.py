@@ -17,6 +17,10 @@ class RB_BayesianPoissonReg:
         self.AcceptVals = []
         self.xVals = [x0]
 
+        # diagnostics (init)
+        self.max_weight_history = []  # track max(P) per iter (peakedness)
+        self.entropy_history = []  # track -sum P log P per iter (diversity)
+
         # seeds for uniforms in R^{d+1}
         from Seed import SeedGen
         xs = SeedGen(d + 1, PowerOfTwo, Stream)
@@ -64,6 +68,12 @@ class RB_BayesianPoissonReg:
             mx = L.max()
             P = np.exp(L - (mx + np.log1p(np.exp(L - mx).sum() - 1.0)))  # log-sum-exp
 
+            #Track whether MP-MCMC weights are collapsing; this guides tuning.
+            maxw = float(P.max())
+            H = float(-(P * np.log(P + 1e-16)).sum())
+            self.max_weight_history.append(maxw)
+            self.entropy_history.append(H)
+
             # RB mean for this iteration
             self.WeightedSum[n, :] = (P[:, None] * Proposals).sum(axis=0)
 
@@ -87,3 +97,11 @@ class RB_BayesianPoissonReg:
 
     def Get_MeanEstimate(self, N, BurnIn=0):
         return self.WeightedSum[int(BurnIn/N):].mean(axis=0)
+
+    def GetDiagnostics(self):
+        # tolerate older objects that might not have these attrs
+        maxw = getattr(self, "max_weight_history", [])
+        H = getattr(self, "entropy_history", [])
+        return {"maxw": np.asarray(maxw), "entropy": np.asarray(H)}
+
+

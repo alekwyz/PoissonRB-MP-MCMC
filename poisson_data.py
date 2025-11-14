@@ -25,7 +25,7 @@ class PoissonDataLoad:
     Simulate and package a Poisson GLM dataset (log link).
     Y ~ Poisson( lambda_i ),  log lambda_i = beta0 + X_i·beta
     """
-    def __init__(self, cfg: PoissonSimConfig, beta_true: np.ndarray | None = None):
+    def __init__(self, cfg: PoissonSimConfig, beta_true: Optional[np.ndarray] = None):
         rng = np.random.default_rng(cfg.seed)
 
         # Generate covariates X (n x D)

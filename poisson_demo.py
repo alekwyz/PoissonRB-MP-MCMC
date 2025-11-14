@@ -3,6 +3,10 @@ import numpy as np
 from poisson_data import PoissonSimConfig, PoissonDataLoad
 from rb_poisson import RB_BayesianPoissonReg
 from arb_poisson import ARB_BayesianPoissonReg
+from typing import Optional
+from helpers_irls import poisson_map_irls
+
+
 
 # data
 cfg = PoissonSimConfig(n=1200, D=10, mean_rate=3.0, eta_sd=0.7, seed=7)
@@ -18,8 +22,9 @@ XXte, yte = XX[test],  y[test]
 
 # prior & proposals
 alpha     = 100.0
-InitMean  = np.zeros(d)
-InitCov   = np.eye(d)
+#InitMean  = np.zeros(d)
+#InitCov   = np.eye(d)
+InitMean, InitCov = poisson_map_irls(XXtr, ytr, alpha=alpha)
 x0        = InitMean.copy()
 
 # MP-MCMC params (pick similar magnitude as your logistic runs)
