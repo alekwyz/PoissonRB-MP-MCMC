@@ -1,10 +1,12 @@
 
 import numpy as np
+import visualize_results
 from poisson_data import PoissonSimConfig, PoissonDataLoad
 from rb_poisson import RB_BayesianPoissonReg
 from arb_poisson import ARB_BayesianPoissonReg
 from typing import Optional
 from helpers_irls import poisson_map_irls
+
 
 
 
@@ -75,3 +77,22 @@ lam_rb  = np.exp(XXte @ rb_mean);  yrep_rb  = np.random.default_rng(1).poisson(l
 lam_arb = np.exp(XXte @ arb_mean); yrep_arb = np.random.default_rng(2).poisson(lam_arb)
 print("PP check (means)  RB:",  yte.mean(), yrep_rb.mean())
 print("PP check (means) ARB:",  yte.mean(), yrep_arb.mean())
+
+# Note: You need to make sure you have the 'true_beta' available.
+# In poisson_data.py, the class has a method GetTrueBeta().
+# Ensure you call it: beta_true = dat.GetTrueBeta()
+
+# If you haven't run a "Fixed/Naive" sampler in this run, pass None
+# If you haven't run MH yet, pass None
+# 如果下面mh_sampler加了，需要改动visualize_result里的main,详见visualize_result
+
+visualize_results.main(
+    rb_sampler=rb,              # Your "Warm Start" RB
+    arb_sampler=arb,            # Your ARB
+    rb_fixed_sampler=None,      # Pass your fixed sampler object here if you have one
+    true_beta=dat.GetTrueBeta(),
+    xx_test=XXte,
+    y_test=yte,
+    N_proposals=N,
+    mh_sampler=None             # <-- PASS 'mh' HERE when you run the RW-MH baseline 看timeline里你说要加RWMH，加完把None换成那个变量
+)
