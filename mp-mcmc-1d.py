@@ -228,7 +228,7 @@ def mp_mcmc(x0, sample_size, N, epsilon):
 
 
 if __name__ == "__main__":
-
+    np.random.seed(42)
     # system parameters
     sample_size = 10_000
     startVal = np.array([0.0])
