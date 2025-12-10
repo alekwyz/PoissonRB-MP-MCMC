@@ -6,6 +6,7 @@ from rb_poisson import RB_BayesianPoissonReg
 from arb_poisson import ARB_BayesianPoissonReg
 from typing import Optional
 from helpers_irls import poisson_map_irls
+from mh_sampler import RW_BayesianPoissonReg
 
 
 
@@ -34,6 +35,20 @@ N         = 20
 StepSize  = 1.0
 PowerOfTwo= 14
 BurnIn    = 5000
+
+# Running RW-MH Baseline for {MH_Budget} iterations
+L = int(int((2**PowerOfTwo - 1) / (d + 1)) * (d + 1) / N)
+print(f"Calculated RB Iterations (L): {L}")
+MH_Budget = L * N
+MH_StepSize = 0.01
+mh = RW_BayesianPoissonReg(
+    N_iter=MH_Budget,
+    StepSize=MH_StepSize,
+    x0=x0,
+    XX=XXtr,
+    y=ytr,
+    alpha=alpha
+)
 
 # run RB (fixed proposal)
 rb = RB_BayesianPoissonReg(
@@ -94,5 +109,5 @@ visualize_results.main(
     xx_test=XXte,
     y_test=yte,
     N_proposals=N,
-    mh_sampler=None             # <-- PASS 'mh' HERE when you run the RW-MH baseline 看timeline里你说要加RWMH，加完把None换成那个变量
+    mh_sampler=mh             # <-- PASS 'mh' HERE when you run the RW-MH baseline 看timeline里你说要加RWMH，加完把None换成那个变量
 )

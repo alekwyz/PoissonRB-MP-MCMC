@@ -84,7 +84,10 @@ class PoissonDataLoad:
         # m = n, d = D+1
         self.m, self.d = self.XX.shape
         self.beta_true = np.concatenate([[beta0], beta_true])
-
+        # # Calculate scaling factor
+        # scale_factor = (cfg.eta_sd / s) if s > 0 else 1.0
+        # # Store the effective beta
+        # self.beta_true = np.concatenate([[beta0], beta_true * scale_factor])
         # Optional checks relevant to the algorithms
         # - With a Gaussian prior N(0, alpha I), the posterior is continuous & proper for finite data.
         # - Independence kernels in RB/ARB satisfy the “independence” assumption if you use fixed (mu, Sigma).
