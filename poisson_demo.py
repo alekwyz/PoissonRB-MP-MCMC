@@ -10,7 +10,7 @@ from mh_sampler import RW_BayesianPoissonReg
 
 
 
-np.random.seed(42)
+np.random.seed(5331)
 # data
 cfg = PoissonSimConfig(n=1200, D=10, mean_rate=3.0, eta_sd=0.7, seed=7)
 dat = PoissonDataLoad(cfg)
