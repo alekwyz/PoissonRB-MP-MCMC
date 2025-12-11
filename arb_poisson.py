@@ -1,4 +1,4 @@
-
+# arb_poisson.py
 import numpy as np
 from scipy.stats import norm
 
@@ -30,6 +30,7 @@ class ARB_BayesianPoissonReg:
 
         # RB storage (+M to incorporate past weight if desired)
         M = int(WeightIn / N) + 1
+        self.M = M
         self.WeightedSum = np.zeros((NumOfIter + M, d))
         self.WeightedCov = np.zeros((NumOfIter + M, d, d))
         self.WeightedSum[:M] = InitMean
@@ -124,3 +125,11 @@ class ARB_BayesianPoissonReg:
         H = getattr(self, "entropy_history", [])
         return {"maxw": np.asarray(maxw), "entropy": np.asarray(H)}
 
+    def Get_RBIterMeans(self):
+        """
+        For ARB, WeightedSum includes M warm-start rows at top.
+        Return the per-iteration RB means aligned with MCMC iterations.
+        """
+        M = self.WeightedSum.shape[0] - len(self.max_weight_history)  # or store M in self.M
+        # safer: store self.M in __init__ when you define it
+        return self.WeightedSum[M:, :]

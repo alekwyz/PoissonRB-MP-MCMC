@@ -1,3 +1,4 @@
+# visualize_results.py
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -132,7 +133,7 @@ def plot_mse_convergence_paper_style(chains, true_param, likelihood_evals_per_it
 
     ax.set_xlabel('Number of Likelihood Evaluations (Cost)')
     ax.set_ylabel('Mean Squared Error (MSE)')
-    ax.set_title('Convergence of Estimators (Paper Replication)')
+    ax.set_title('Convergence of Estimators')
     ax.legend()
     ax.grid(True, which="both", ls="-", alpha=0.3)
 

@@ -1,5 +1,5 @@
 
-
+# rb_poisson.py
 import numpy as np
 from scipy.stats import norm
 
@@ -103,5 +103,12 @@ class RB_BayesianPoissonReg:
         maxw = getattr(self, "max_weight_history", [])
         H = getattr(self, "entropy_history", [])
         return {"maxw": np.asarray(maxw), "entropy": np.asarray(H)}
+
+    def Get_RBIterMeans(self):
+        """
+        Return per-iteration Rao-Blackwellised mean contributions:
+        array of shape (L, d), where row ℓ is sum_i w_i^{(ℓ)} y_i^{(ℓ)}.
+        """
+        return self.WeightedSum
 
 
